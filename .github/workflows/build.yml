@@ -29,7 +29,7 @@ jobs:
       run: msbuild ${{ env.PROJECT_NAME }}.sln /p:Configuration=Release
 
     - name: Deep ls
-      run: ls -ahlR
+      run: Get-ChildItem -Recurse
 
     - name: Create artifact (win64, no dotnet)
       uses: thedoctor0/zip-release@0.7.6
