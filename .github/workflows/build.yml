@@ -36,7 +36,7 @@ jobs:
       shell: cmd
 
     - name: Where are we
-      run: Get-Location; Get-ChildItem -Recurse
+      run: Get-Location; Get-ChildItem -Recurse -Name
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
