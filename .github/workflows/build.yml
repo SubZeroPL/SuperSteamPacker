@@ -1,0 +1,23 @@
+name: Build
+
+on:
+  workflow_dispatch:    
+
+permissions:
+  contents: read # access to check out code and install dependencies
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 4.7.8
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore -c Release
