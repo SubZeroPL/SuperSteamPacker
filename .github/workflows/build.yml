@@ -22,26 +22,21 @@ jobs:
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v2
 
+    - name: Setup tools
+      run: dotnet tool install -g dotnet-ilrepack
+
     - name: Restore NuGet packages
       run: nuget restore ${{ env.PROJECT_NAME }}.sln
 
     - name: Build with MSBuild
       run: msbuild ${{ env.PROJECT_NAME }}.sln /p:Configuration=Release
 
-    - name: Repack-Split
-      run: build_release_ver.bat
+    - name: Repack
+      run: bin/release/ilrepack /ndebug /xmldocs /noRepackRes /wildcards /parallel /out:..\..\${{ env.PROJECT_NAME }}.exe ${{ env.PROJECT_NAME }}.exe *.dll
       shell: cmd
-
-    - name: Create artifact (win64, no dotnet)
-      uses: thedoctor0/zip-release@0.7.6
-      with:
-        type: 'zip'
-        filename: ${{ env.PROJECT_NAME }}_latest.zip
-        directory: bin/Release/
-        exclusions: '*.pdb'
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.PROJECT_NAME }}_latest.zip
-        path: ${{ env.PROJECT_NAME }}/bin/Release/
+        name: ${{ env.PROJECT_NAME }}.exe
+        path: ${{ env.PROJECT_NAME }}.exe
