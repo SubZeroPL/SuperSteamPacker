@@ -9,6 +9,8 @@ permissions:
 jobs:
   build:
     runs-on: windows-latest
+    env:
+      PROJECT_NAME: SuperSteamPacker
 
     steps:
     - name: Checkout
@@ -21,7 +23,24 @@ jobs:
       uses: NuGet/setup-nuget@v2
 
     - name: Restore NuGet packages
-      run: nuget restore SuperSteamPacker.sln
+      run: nuget restore ${{ env.PROJECT_NAME }}.sln
 
     - name: Build with MSBuild
-      run: msbuild SuperSteamPacker.sln /p:Configuration=Release
+      run: msbuild ${{ env.PROJECT_NAME }}.sln /p:Configuration=Release
+
+    - name: Deep ls
+      run: ls -ahlR
+
+    - name: Create artifact (win64, no dotnet)
+      uses: thedoctor0/zip-release@0.7.6
+      with:
+        type: 'zip'
+        filename: ${{ env.PROJECT_NAME }}_latest.zip
+        directory: bin/Release/net8.0/win-x64/publish/
+        exclusions: '*.pdb'
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Jiggle-x64.exe
+        path: Jiggle/bin/Release/${{ steps.get_framework.outputs.framework }}/win-x64/publish/Jiggle.exe
