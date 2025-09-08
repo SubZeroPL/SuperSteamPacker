@@ -35,8 +35,13 @@ jobs:
       run: ilrepack /ndebug /xmldocs /noRepackRes /wildcards /parallel /out:..\${{ env.PROJECT_NAME }}.exe bin/release/${{ env.PROJECT_NAME }}.exe *.dll
       shell: cmd
 
+    - name: Where are we
+      run: Get-Location; Get-ChildItem -Recurse
+
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.PROJECT_NAME }}.exe
-        path: ${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.exe
+        path: ./${{ env.PROJECT_NAME }}.exe
+        if-no-files-found: error
+        overwrite: true
