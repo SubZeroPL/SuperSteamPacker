@@ -28,15 +28,16 @@ jobs:
     - name: Build with MSBuild
       run: msbuild ${{ env.PROJECT_NAME }}.sln /p:Configuration=Release
 
-    - name: Deep ls
-      run: Get-ChildItem -Recurse
+    - name: Repack-Split
+      run: build_release_ver.bat
+      shell: cmd
 
     - name: Create artifact (win64, no dotnet)
       uses: thedoctor0/zip-release@0.7.6
       with:
         type: 'zip'
         filename: ${{ env.PROJECT_NAME }}_latest.zip
-        directory: bin/Release/net8.0/win-x64/publish/
+        directory: bin/Release/
         exclusions: '*.pdb'
 
     - name: Upload artifact
