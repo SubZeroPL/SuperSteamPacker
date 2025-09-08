@@ -32,7 +32,7 @@ jobs:
       run: msbuild ${{ env.PROJECT_NAME }}.sln /p:Configuration=Release
 
     - name: Repack
-      run: ilrepack /ndebug /xmldocs /noRepackRes /wildcards /parallel /out:..\..\${{ env.PROJECT_NAME }}.exe ${{ env.PROJECT_NAME }}.exe *.dll
+      run: ilrepack /ndebug /xmldocs /noRepackRes /wildcards /parallel /out:..\..\${{ env.PROJECT_NAME }}.exe bin/release/${{ env.PROJECT_NAME }}.exe *.dll
       shell: cmd
 
     - name: Upload artifact
